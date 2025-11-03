@@ -7,29 +7,34 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QSlider>
+#include <map>
+
 class Ekran : public QWidget
 {
     Q_OBJECT
-    QImage im;
+    QImage im, red,blue,green,preview;
     bool isPressed = false;
     QPoint start, last;
-   // std::vector<QPoint> points;
+    QImage im_save;
     int r;
     int g;
     int b;
 public:
     explicit Ekran(QWidget *parent = nullptr);
 protected:
+    bool clickOnRed(QPoint pos);
+    bool clickOnGreen(QPoint pos);
+    bool clickOnBlue(QPoint pos);
     void paintEvent(QPaintEvent *);
     void mouseMoveEvent(QMouseEvent *e);
-    void drawToPoint(QPoint now, QPoint prev, int _r=0 ,int _g=0 ,int _b=0);// , bool save=false);
-    // (opcjonalnie) void drawPixel(int x, int y, int R ,int G ,int B ) i wtedy w .cpp trzeba przy wywolaniu tej funckji podac (x,y,0,0,0)  tam gdzie wczesniej byl tylko (x,y)
-    // i zmienic w deklaracji funkcji nazyw zmiennych (czyli void Ekran::drawToPoint(QPoint now, QPoint prev, int R, int G, int B)
-    void drawPixel(int x, int y, int _r=0 ,int _g=0 ,int _b=0 );
-    // tu podobnie
+    void drawToPoint(QPoint now, QPoint prev);
+    void drawPixel(int x, int y);
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
-  //  void drawPoints();
+    void imageFrame(QImage& im, int size);
+    void drawPoints();
+    void drawCircle(QPoint now, QPoint prev);
+    void drawElipse(QPoint now, QPoint prev);
 signals:
 
 };
