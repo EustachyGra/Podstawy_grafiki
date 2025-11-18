@@ -14,6 +14,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void changeButtonColor(QColor color);
+    void buttonSelected(int i);
 
 private:
     Ui::MainWindow *ui;
