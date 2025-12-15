@@ -68,6 +68,27 @@ void Ekran::mouseMoveEvent(QMouseEvent *e)
             drawCurve();
         }
     }
+    else if(type == DrawType::AddPolP)
+    {
+        if(e->pos().x()>=im.width() || e->pos().x()<0 || e->pos().y()>=im.height() || e->pos().y()<0)
+            return;
+        polPi[polPi.size()-1] = e->pos();
+        drawPolygonPoints();
+        drawFilledPolygon();
+        update();
+    }
+    else if(type == DrawType::MvPolP)
+    {
+        if(e->pos().x()>=im.width() || e->pos().x()<0 || e->pos().y()>=im.height() || e->pos().y()<0)
+            return;
+        if(idxPi<0)
+            return;
+        polPi[idxPi] = e->pos();
+        drawPolygonPoints();
+        drawFilledPolygon();
+        update();
+    }
+
     else
         im = im_save.copy();
 
@@ -236,6 +257,54 @@ void Ekran::mousePressEvent(QMouseEvent *e)
         update();
         return;
     }
+    if(type == DrawType::AddPolP)
+    {
+        isPressed = true;
+        if(polPi.size()<=0)
+            im_save = im.copy();
+        polPi.push_back(e->pos());
+        drawPolygonPoints();
+        drawFilledPolygon();
+        update();
+        return;
+    }
+    if(type == DrawType::MvPolP)
+    {
+        if(polPi.size()<=0)
+            im_save = im.copy();
+        isPressed = true;
+        for(int i = 0; i<polPi.size();i++)
+        {
+            if(calcLength(e->pos(),polPi[i])<=10)
+            {
+                idxPi = i;
+                break;
+            }
+        }
+        drawPolygonPoints();
+        drawFilledPolygon();
+        update();
+        return;
+    }
+    if(type == DrawType::DelPolP)
+    {
+        if(polPi.size()<=0)
+            im_save = im.copy();
+        for(int i = 0; i<polPi.size();i++)
+        {
+            if(calcLength(e->pos(),polPi[i])<=10)
+            {
+                //qDebug("%s", "znal");
+                polPi.erase(polPi.begin()+i);
+                break;
+            }
+        }
+        drawPolygonPoints();
+        drawFilledPolygon();
+        update();
+        return;
+    }
+
     isPressed = true;
     im_save = im.copy();
 }
@@ -254,48 +323,9 @@ void Ekran::mouseReleaseEvent(QMouseEvent *e)
         }
         update();
     }
-    if(type == DrawType::MvP)
+    if(idxPi>=0)
     {
         idxPi = -1;
-    }
-}
-
-void Ekran::imageFrame(QImage& img, int size)
-{
-    for(int i=0; i<size;i++)
-    {
-        uchar *pixels = img.scanLine(i);
-        for(int j=0;j<img.width();j++)
-        {
-            pixels[4*j]=0;
-            pixels[4*j+1]=0;
-            pixels[4*j+2]=0;
-            pixels[4*j+3]=255;
-        }
-        pixels = img.scanLine(img.height()-i-1);
-        for(int j=0;j<img.width();j++)
-        {
-            pixels[4*j]=0;
-            pixels[4*j+1]=0;
-            pixels[4*j+2]=0;
-            pixels[4*j+3]=255;
-        }
-    }
-    for(int i=0; i<img.height();i++)
-    {
-        uchar *pixels = img.scanLine(i);
-        for(int j=0;j<size;j++)
-        {
-            int tmp = img.width()-1;
-            pixels[4*j]=0;
-            pixels[4*j+1]=0;
-            pixels[4*j+2]=0;
-            pixels[4*j+3]=255;
-            pixels[4*(tmp-j)]=0;
-            pixels[4*(tmp-j)+1]=0;
-            pixels[4*(tmp-j)+2]=0;
-            pixels[4*(tmp-j)+3]=255;
-        }
     }
 }
 
@@ -393,9 +423,61 @@ void Ekran::drawCurvePoints()
         update();
 }
 
+void Ekran::drawFilledPolygon()
+{
+        if(polPi.size()==0)
+            return;
+        if(polPi.size()==1){
+            drawPixel(polPi[0].x(),polPi[0].y());
+            return;
+        }
+        if(polPi.size()==2){
+            drawToPoint(polPi[0],polPi[1]);
+            return;
+        }
+        int minY=im.height(),maxY=0;
+        for(int i=0 ; i<polPi.size();i++)
+        {
+            drawToPoint(polPi[i],polPi[(i+1)%polPi.size()]);
+            if(minY>polPi[i].y())
+                minY=polPi[i].y();
+            if(maxY<polPi[i].y())
+                maxY=polPi[i].y();
+        }
+        for(int y = minY; y<=maxY; y++)
+        {
+            std::vector<QPoint> crossPoints;
+            for(int i=0 ; i<polPi.size();i++)
+            {
+                if(isLineCrossed(polPi[i],polPi[(i+1)%polPi.size()],y))
+                    crossPoints.push_back(findCrossPoint(polPi[i],polPi[(i+1)%polPi.size()],y));
+            }
+            std::sort(crossPoints.begin(),crossPoints.end(),[](const QPoint &a, const QPoint &b){return a.x()<b.x();});
+            qDebug() << crossPoints.size();
+
+            for(int k=0; 2*k<crossPoints.size();k++)
+            {
+                drawToPoint(crossPoints[2*k],crossPoints[2*k+1]);
+                update();
+            }
+        }
+
+}
+
+void Ekran::drawPolygonPoints()
+{
+        im = im_save.copy();
+        for(int i = 0; i < polPi.size(); i++)
+        {
+            drawSquare(polPi[i],10);
+        }
+        update();
+}
+
 void Ekran::lineChange()
 {
     saveCurve();
+    savePolygon();
     ResetButtons();
     type = DrawType::Line;
     emit currentType(1);
@@ -407,6 +489,7 @@ void Ekran::lineChange()
 void Ekran::circChange()
 {
     saveCurve();
+    savePolygon();
     ResetButtons();
     type = DrawType::Elipse;
     emit currentType(2);
@@ -441,6 +524,27 @@ void Ekran::movePointSet()
     return;
 }
 
+void Ekran::addPolygonPointSet()
+{
+    type = DrawType::AddPolP;
+    emit currentType(7);
+    return;
+}
+
+void Ekran::delPolygonPointSet()
+{
+    type = DrawType::DelPolP;
+    emit currentType(8);
+    return;
+}
+
+void Ekran::movePolygonPointSet()
+{
+    type = DrawType::MvPolP;
+    emit currentType(9);
+    return;
+}
+
 void Ekran::colorDialog()
 {
     QColor color = QColorDialog::getColor(Qt::white,this,tr("Select color"));
@@ -450,10 +554,38 @@ void Ekran::colorDialog()
 
 void Ekran::fillChange()
 {
+    saveCurve();
+    savePolygon();
     ResetButtons();
     type = DrawType::Fill;
     emit currentType(6);
     return;
+}
+
+void Ekran::polygonChange(int i)
+{
+    if(tabPi.size()>=4)
+            saveCurve();
+    switch(i)
+    {
+    case 0:
+            ResetButtons();
+            break;
+    case 1:
+            ResetButtons();
+            addPolygonPointSet();
+            break;
+    case 2:
+            ResetButtons();
+            delPolygonPointSet();
+            break;
+    case 3:
+            ResetButtons();
+            movePolygonPointSet();
+            break;
+    default:
+            break;
+    }
 }
 
 void Ekran::saveCurve()
@@ -465,6 +597,44 @@ void Ekran::saveCurve()
         drawCurve();
     tabPi.clear();
     update();
+}
+
+void Ekran::savePolygon()
+{
+    if(type != DrawType::AddPolP && type != DrawType::DelPolP && type != DrawType::MvPolP)
+        return;
+    im = im_save.copy();
+    drawFilledPolygon();
+    polPi.clear();
+    update();
+}
+
+bool Ekran::isLineCrossed(QPoint l1, QPoint l2, int y)
+{
+    if (l1.y() == l2.y())
+        return false;
+
+    return ( (y >= std::min(l1.y(),l2.y())) && (y < std::max(l1.y(),l2.y())) );
+}
+
+QPoint Ekran::findCrossPoint(QPoint l1, QPoint l2, int y)
+{
+    int x1 = l1.x();
+    int y1 = l1.y();
+    int x2 = l2.x();
+    int y2 = l2.y();
+    if(x1==x2 && y1==y2)
+    {
+        return QPoint(x1,y1);
+    }
+    if(y1==y2)
+    {
+        return QPoint(x1,y);
+    }
+    int x;
+    float a=float(x2-x1)/float(y2-y1);
+    x = x1+(y-y1)*a;
+    return QPoint(x,y);
 }
 
 void Ekran::floodFill(QPoint point, QColor color)
@@ -494,20 +664,13 @@ void Ekran::floodFill(QPoint point, QColor color)
     }
 }
 
-RGB Ekran::getColor(QPoint point)
-{
-    uchar *pixels = im.scanLine(point.y());
-    int b = pixels[4*point.x()];
-    int g = pixels[4*point.x()+1];
-    int r = pixels[4*point.x()+2];
-    int a = pixels[4*point.x()+3];
-    RGB out = {r,g,b,a};
-    return out;
-}
-
 void Ekran::curveChange(int i)
 {
     //qDebug() << i;
+    if(polPi.size()>0)
+    {
+        savePolygon();
+    }
     switch(i)
     {
     case 0:

@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->LineButton,&QPushButton::released,ui->wEkran, &Ekran::lineChange);
     connect(ui->CircButton,&QPushButton::released,ui->wEkran, &Ekran::circChange);
     connect(ui->Curve,&QComboBox::currentIndexChanged,ui->wEkran, &Ekran::curveChange);
+    connect(ui->Polygon,&QComboBox::currentIndexChanged,ui->wEkran, &Ekran::polygonChange);
     connect(ui->Color,&QPushButton::released, ui->wEkran, &Ekran::colorDialog);
     connect(ui->wEkran,&Ekran::ColorChange, this, &MainWindow::changeButtonColor);
     connect(ui->wEkran,&Ekran::currentType, this, &MainWindow::buttonSelected);
@@ -39,6 +40,10 @@ void MainWindow::buttonSelected(int i)
     ui->Curve->setCurrentIndex(0);
     ui->Curve->blockSignals(false);
 
+    ui->Polygon->blockSignals(true);
+    ui->Polygon->setCurrentIndex(0);
+    ui->Polygon->blockSignals(false);
+
     switch (i) {
     case 1:
         ui->LineButton->setFlat(true);
@@ -63,6 +68,21 @@ void MainWindow::buttonSelected(int i)
         break;
     case 6:
         ui->FillButton->setFlat(true);
+        break;
+    case 7:
+        ui->Polygon->blockSignals(true);
+        ui->Polygon->setCurrentIndex(1);
+        ui->Polygon->blockSignals(false);
+        break;
+    case 8:
+        ui->Polygon->blockSignals(true);
+        ui->Polygon->setCurrentIndex(2);
+        ui->Polygon->blockSignals(false);
+        break;
+    case 9:
+        ui->Polygon->blockSignals(true);
+        ui->Polygon->setCurrentIndex(3);
+        ui->Polygon->blockSignals(false);
         break;
     default:
         break;

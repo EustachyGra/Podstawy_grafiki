@@ -9,7 +9,6 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QSlider>
-#include <map>
 #include <QColorDialog>
 #include <QDebug>
 
@@ -22,17 +21,12 @@ enum class DrawType{
     DelP,
     MvP,
     None,
-    Fill
+    Fill,
+    AddPolP,
+    DelPolP,
+    MvPolP
 };
 
-struct RGB{
-    int r;
-    int g;
-    int b;
-    int a;
-
-    friend bool operator==(RGB c1, RGB c2);
-};
 
 class Ekran : public QWidget
 {
@@ -42,7 +36,7 @@ class Ekran : public QWidget
     DrawType type;
     QPoint start, last;
     QImage im_save;
-    std::vector<QPoint> tabPi;
+    std::vector<QPoint> tabPi, polPi;
     int idxPi = -1;
     int r;
     int g;
@@ -58,7 +52,6 @@ protected:
     void drawPixel(int x, int y);
     void mousePressEvent(QMouseEvent *);
     void mouseReleaseEvent(QMouseEvent *);
-    void imageFrame(QImage& im, int size);
     void drawPoints();
     void drawCircle(QPoint now, QPoint prev);
     void drawElipse(QPoint now, QPoint prev);
@@ -66,10 +59,14 @@ protected:
     void keyPressEvent (QKeyEvent *ev);
     void keyReleaseEvent (QKeyEvent *ev);
     void drawCurvePoints();
+    void drawFilledPolygon();
+    void drawPolygonPoints();
     void ResetButtons();
     void saveCurve();
+    void savePolygon();
+    bool isLineCrossed(QPoint l1, QPoint l2, int y);
+    QPoint findCrossPoint(QPoint l1, QPoint l2, int y);
     void floodFill(QPoint point, QColor color);
-    RGB getColor(QPoint point);
 signals:
     void ColorChange(QColor col);
     void currentType(int i);
@@ -80,8 +77,12 @@ public slots:
     void addPointSet();
     void delPointSet();
     void movePointSet();
+    void addPolygonPointSet();
+    void delPolygonPointSet();
+    void movePolygonPointSet();
     void colorDialog();
     void fillChange();
+    void polygonChange(int i);
 private:
     void showEvent(QShowEvent *event);
 };
