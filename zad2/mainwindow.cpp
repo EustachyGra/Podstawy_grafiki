@@ -7,15 +7,18 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->LineButton,&QPushButton::released,ui->wEkran, &Ekran::lineChange);
-    connect(ui->CircButton,&QPushButton::released,ui->wEkran, &Ekran::circChange);
-    connect(ui->Curve,&QComboBox::currentIndexChanged,ui->wEkran, &Ekran::curveChange);
     connect(ui->Polygon,&QComboBox::currentIndexChanged,ui->wEkran, &Ekran::polygonChange);
-    connect(ui->Color,&QPushButton::released, ui->wEkran, &Ekran::colorDialog);
-    connect(ui->wEkran,&Ekran::ColorChange, this, &MainWindow::changeButtonColor);
-    connect(ui->wEkran,&Ekran::currentType, this, &MainWindow::buttonSelected);
-    connect(ui->FillButton,&QPushButton::released, ui->wEkran, &Ekran::fillChange);
-
+    connect(ui->alfa,&QSlider::valueChanged,this,&MainWindow::createMatrix);
+    connect(ui->tx,&QSlider::valueChanged,this,&MainWindow::createMatrix);
+    connect(ui->shx,&QSlider::valueChanged,this,&MainWindow::createMatrix);
+    connect(ui->ty,&QSlider::valueChanged,this,&MainWindow::createMatrix);
+    connect(ui->shy,&QSlider::valueChanged,this,&MainWindow::createMatrix);
+    connect(ui->sx,&QSlider::valueChanged,this,&MainWindow::createMatrix);
+    connect(ui->sy,&QSlider::valueChanged,this,&MainWindow::createMatrix);
+    connect(ui->wEkran,&Ekran::oseted,this,&MainWindow::buttonSelected);
+    connect(ui->origin,&QPushButton::released,ui->wEkran,&Ekran::originset);
+    connect(this,&MainWindow::variables,ui->wEkran,&Ekran::applyMatrix);
+    connect(ui->reset,&QPushButton::released,this,&MainWindow::resetvalues);
 }
 
 MainWindow::~MainWindow()
@@ -23,69 +26,34 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::changeButtonColor(QColor color)
+void MainWindow::buttonSelected()
 {
-    QString qss = QString("background-color: %1").arg(color.name());
-    ui->Color->setStyleSheet(qss);
-}
-
-void MainWindow::buttonSelected(int i)
-{
-    qDebug() << i;
-    ui->LineButton->setFlat(false);
-    ui->CircButton->setFlat(false);
-    ui->FillButton->setFlat(false);
-
-    ui->Curve->blockSignals(true);
-    ui->Curve->setCurrentIndex(0);
-    ui->Curve->blockSignals(false);
-
+    ui->origin->setFlat(false);
     ui->Polygon->blockSignals(true);
     ui->Polygon->setCurrentIndex(0);
     ui->Polygon->blockSignals(false);
+}
+void MainWindow::createMatrix()
+{
+    int tx = ui->tx->value();
+    int ty = ui->ty->value();
+    int sx = ui->sx->value();
+    int sy = ui->sy->value();
+    int a = ui->alfa->value();
+    int shx = ui->shx->value();
+    int shy = ui->shy->value();
 
-    switch (i) {
-    case 1:
-        ui->LineButton->setFlat(true);
-        break;
-    case 2:
-        ui->CircButton->setFlat(true);
-        break;
-    case 3:
-        ui->Curve->blockSignals(true);
-        ui->Curve->setCurrentIndex(1);
-        ui->Curve->blockSignals(false);
-        break;
-    case 4:
-        ui->Curve->blockSignals(true);
-        ui->Curve->setCurrentIndex(2);
-        ui->Curve->blockSignals(false);
-        break;
-    case 5:
-        ui->Curve->blockSignals(true);
-        ui->Curve->setCurrentIndex(3);
-        ui->Curve->blockSignals(false);
-        break;
-    case 6:
-        ui->FillButton->setFlat(true);
-        break;
-    case 7:
-        ui->Polygon->blockSignals(true);
-        ui->Polygon->setCurrentIndex(1);
-        ui->Polygon->blockSignals(false);
-        break;
-    case 8:
-        ui->Polygon->blockSignals(true);
-        ui->Polygon->setCurrentIndex(2);
-        ui->Polygon->blockSignals(false);
-        break;
-    case 9:
-        ui->Polygon->blockSignals(true);
-        ui->Polygon->setCurrentIndex(3);
-        ui->Polygon->blockSignals(false);
-        break;
-    default:
-        break;
-    }
+    emit variables(tx,ty,sx,sy,a,shx,shy);
+}
+
+void MainWindow::resetvalues()
+{
+    ui->tx->setValue(0);
+    ui->ty->setValue(0);
+    ui->sx->setValue(1);
+    ui->sy->setValue(1);
+    ui->alfa->setValue(0);
+    ui->shx->setValue(0);
+    ui->shy->setValue(0);
 }
 
