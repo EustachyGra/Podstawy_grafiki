@@ -9,7 +9,6 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pusty_reset, &QPushButton::released, ui->ekran, &Ekran::resetPkt);
     connect(ui->tekstura_reset, &QPushButton::released, ui->tekstura,&Ekran::resetPkt);
     connect(ui->rob,&QPushButton::released,this,&MainWindow::rob);
-    connect(ui->clean,&QPushButton::released,ui->ekran,&Ekran::clean);
 }
 
 MainWindow::~MainWindow()

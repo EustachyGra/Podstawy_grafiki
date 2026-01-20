@@ -9,6 +9,7 @@ void Ekran::showEvent(QShowEvent *event)
     QWidget::showEvent(event);
     Bg = QImage(size(), QImage::Format_ARGB32);
     Bg.fill(0xff000000);
+    save = Bg.copy();
 }
 
 void Ekran::paintEvent(QPaintEvent *)
@@ -20,19 +21,52 @@ void Ekran::paintEvent(QPaintEvent *)
 
 void Ekran::loadImg(const QString &name)
 {
+    resetPkt();
     if (!Bg.load(name))
     {
         qDebug() << "Nie mozna wczytac:" << name;
         return;
     }
+    save = Bg.copy();
     update();
+}
+
+void Ekran::drawToPoint(QPoint a, QPoint b)
+{
+    int x1 = a.x(), y1 = a.y();
+    int x2 = b.x(), y2 = b.y();
+
+    int dx = std::abs(x2 - x1);
+    int dy = std::abs(y2 - y1);
+    int sx = x1 < x2 ? 1 : -1;
+    int sy = y1 < y2 ? 1 : -1;
+    int err = dx - dy;
+
+    while (true)
+    {
+
+        drawPixel(x1, y1,0,0,0,0);
+        if (x1 == x2 && y1 == y2) break;
+        int e2 = 2 * err;
+        if (e2 > -dy) { err -= dy; x1 += sx; }
+        if (e2 < dx)  { err += dx; y1 += sy; }
+    }
 }
 
 void Ekran::mousePressEvent(QMouseEvent *e)
 {
     if(triangle.size()>=3)
         return;
+
     triangle.push_back(e->pos());
+
+    if(triangle.size()==3)
+    {
+        drawToPoint(triangle[0],triangle[1]);
+        drawToPoint(triangle[1],triangle[2]);
+        drawToPoint(triangle[2],triangle[0]);
+        update();
+    }
     qDebug() << e->pos() << triangle.size();
 }
 
@@ -85,10 +119,7 @@ void Ekran::drawPixel(int x, int y, int r, int g, int b, int a)
 void Ekran::resetPkt()
 {
     triangle.clear();
-}
-
-void Ekran::clean()
-{
-    Bg.fill(0xff000000);
+    Bg = save.copy();
     update();
 }
+

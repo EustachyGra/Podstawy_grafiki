@@ -50,8 +50,8 @@ void MainWindow::resetvalues()
 {
     ui->tx->setValue(0);
     ui->ty->setValue(0);
-    ui->sx->setValue(1);
-    ui->sy->setValue(1);
+    ui->sx->setValue(0);
+    ui->sy->setValue(0);
     ui->alfa->setValue(0);
     ui->shx->setValue(0);
     ui->shy->setValue(0);

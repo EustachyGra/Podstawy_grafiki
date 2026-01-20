@@ -45,22 +45,21 @@ class Ekran : public QWidget
 public:
     explicit Ekran(QWidget *parent = nullptr);
     std::vector<QPoint> triangle;
-
     void loadImg(const QString &name);
     void mousePressEvent(QMouseEvent *e);
     QPoint getMinYMaxY();
     void getRGBA(double u, double v, double w, int &r, int &g, int &b, int &a);
     RGB getRGB(QPoint p);
     void drawPixel(int x, int y, int r, int g, int b, int a);
+    void drawToPoint(QPoint a, QPoint b);
 public slots:
     void resetPkt();
-    void clean();
 protected:
     void paintEvent(QPaintEvent *) override;
     void showEvent(QShowEvent *event) override;
 
 private:
-    QImage Bg;
+    QImage Bg, save;
 };
 
 #endif
