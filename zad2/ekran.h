@@ -121,7 +121,6 @@ public:
     explicit Ekran(QWidget *parent = nullptr);
 
 protected:
-    // eventy
     void showEvent(QShowEvent *event) override;
     void paintEvent(QPaintEvent *) override;
     void mouseMoveEvent(QMouseEvent *e) override;
@@ -129,25 +128,17 @@ protected:
     void mouseReleaseEvent(QMouseEvent *e) override;
     void keyPressEvent(QKeyEvent *ev) override;
     void keyReleaseEvent(QKeyEvent *ev) override;
-
-    // pomocnicze
     float calcLength(QPoint p1, QPoint p2);
     void drawToPoint(QPoint now, QPoint prev);
     void drawPixel(int x, int y, int r=255, int g=255, int b =255);
     void drawPoints();
     void drawSquare(QPoint center, int a, int r=255, int g=255, int b=255);
-
-    // wielokąt
     void drawFilledPolygon(std::vector<QPoint> vec);
     void drawPolygonPoints();
     void ResetButtons();
     void savePolygon();
-
-    // scanline helpers
     bool isLineCrossed(QPoint l1, QPoint l2, int y);
     QPoint findCrossPoint(QPoint l1, QPoint l2, int y);
-
-    // flood fill
     void floodFill(QPoint point, QColor color);
 
 signals:
@@ -156,6 +147,7 @@ signals:
     void oseted();
 
 public slots:
+    void transform();
     void addPolygonPointSet();
     void delPolygonPointSet();
     void movePolygonPointSet();

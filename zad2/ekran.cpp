@@ -29,8 +29,6 @@ float Ekran::calcLength(QPoint p1, QPoint p2)
         (p2.y() - p1.y()) * (p2.y() - p1.y()));
 }
 
-// ================== RYSOWANIE ==================
-
 void Ekran::drawPixel(int x, int y, int r, int g, int b)
 {
     if (x < 0 || y < 0 || x >= im.width() || y >= im.height())
@@ -98,8 +96,6 @@ void Ekran::drawFilledPolygon(std::vector<QPoint> vec)
         drawToPoint(vec.back(), vec.front());
 }
 
-// ================== MYSZ ==================
-
 void Ekran::mousePressEvent(QMouseEvent *e)
 {
     if (type == DrawType::AddPolP)
@@ -126,7 +122,6 @@ void Ekran::mousePressEvent(QMouseEvent *e)
     }
     else if(type == DrawType::DelPolP)
     {
-        // usuwanie od końca, aby nie stracić indeksów
         for (int i = static_cast<int>(polPi.size()) - 1; i >= 0; i--)
         {
             if(calcLength(e->pos(),polPi[i]) < 10)
@@ -168,7 +163,6 @@ void Ekran::mouseReleaseEvent(QMouseEvent *)
     }
 }
 
-// ================== TRANSFORMACJE ==================
 
 QPoint Ekran::applyMatrix(int tx, int ty, int sx, int sy, int a, int shx, int shy)
 {
@@ -185,7 +179,7 @@ QPoint Ekran::applyMatrix(int tx, int ty, int sx, int sy, int a, int shx, int sh
     drawFilledPolygon(polT);
     update();
 
-    return QPoint(); // nie zwracamy nic sensownego, można zmienić na void
+    return QPoint();
 }
 
 macierz Ekran::createMacierz(float tx, float ty, float sx, float sy, float a, float shx, float shy)
@@ -196,11 +190,8 @@ macierz Ekran::createMacierz(float tx, float ty, float sx, float sy, float a, fl
     S.scale(1+sx/20, 1+sy/20);
     R.rotate(a);
 
-    // Kolejność: najpierw skala, potem rotacja, shear, translacja
     return T * Sh * R * S;
 }
-
-// ================== POZOSTAŁE ==================
 
 void Ekran::ResetButtons()
 {
@@ -246,5 +237,13 @@ void Ekran::savePolygon() {}
 bool Ekran::isLineCrossed(QPoint, QPoint, int) { return false; }
 QPoint Ekran::findCrossPoint(QPoint, QPoint, int) { return {}; }
 void Ekran::floodFill(QPoint, QColor) {}
+
+void Ekran::transform()
+{
+    polPi = polT;
+    drawPolygonPoints();
+    drawFilledPolygon(polPi);
+    update();
+}
 void Ekran::keyPressEvent(QKeyEvent *) {}
 void Ekran::keyReleaseEvent(QKeyEvent *) {}

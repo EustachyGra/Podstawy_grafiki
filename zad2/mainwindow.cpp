@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->origin,&QPushButton::released,ui->wEkran,&Ekran::originset);
     connect(this,&MainWindow::variables,ui->wEkran,&Ekran::applyMatrix);
     connect(ui->reset,&QPushButton::released,this,&MainWindow::resetvalues);
+    connect(ui->pushButton,&QPushButton::released,ui->wEkran,&Ekran::transform);
 }
 
 MainWindow::~MainWindow()
