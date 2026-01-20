@@ -1,0 +1,101 @@
+#include <UnoR4WiFi_WebServer.h>
+
+// =======================
+// KONFIGURACJA – ZMIENIASZ TYLKO TO
+// =======================
+
+// Dane Twojej sieci WiFi
+const char WIFI_SSID[]     = "TWOJA_SIEC_WIFI";
+const char WIFI_PASSWORD[] = "TWOJE_HASLO";
+
+// Pin sterowanego urządzenia (LED, przekaźnik, PWM)
+#define DEVICE_PIN 9
+
+// =======================
+// KONIEC KONFIGURACJI
+// =======================
+
+
+// Strona WWW (ON / OFF + suwak 0–255)
+const char HTML_PAGE[] =
+  "<!DOCTYPE html>"
+  "<html><head><meta charset='utf-8'></head>"
+  "<body>"
+  "<h2>Sterowanie Arduino</h2>"
+
+  "<a href='/set?value=255'>WLACZ</a><br><br>"
+  "<a href='/set?value=0'>WYLACZ</a><br><br>"
+
+  "<h3>Regulacja (0-255)</h3>"
+  "<input type='range' min='0' max='255' value='0' "
+  "oninput='fetch(`/set?value=${this.value}`)'>"
+
+  "</body></html>";
+
+
+// Zmienne systemowe
+UnoR4WiFi_WebServer server;
+int deviceValue = 0;
+
+
+// Obsługa żądań
+void handleSet(WiFiClient& client,
+               const String&,
+               const String&,
+               const QueryParams& params,
+               const String&) {
+
+  if (params.contains("value")) {
+    deviceValue = params.get("value").toInt();
+    deviceValue = constrain(deviceValue, 0, 255);
+
+    if (deviceValue == 0) {
+      digitalWrite(DEVICE_PIN, LOW);
+    } else if (deviceValue == 255) {
+      digitalWrite(DEVICE_PIN, HIGH);
+    } else {
+      analogWrite(DEVICE_PIN, deviceValue);
+    }
+
+    Serial.print("Ustawiona wartosc: ");
+    Serial.println(deviceValue);
+  }
+
+  server.sendResponse(client, HTML_PAGE);
+}
+
+
+// Start systemu
+void setup() {
+  Serial.begin(9600);
+  delay(1000);
+
+  pinMode(DEVICE_PIN, OUTPUT);
+  digitalWrite(DEVICE_PIN, LOW);
+
+  Serial.print("Laczenie z WiFi: ");
+  Serial.println(WIFI_SSID);
+
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("\nPolaczono!");
+  Serial.print("IP Arduino: ");
+  Serial.println(WiFi.localIP());
+
+  server.addRoute("/", handleSet);
+  server.addRoute("/set", handleSet);
+
+  server.begin();
+  Serial.println("Serwer WWW uruchomiony");
+}
+
+
+// Petla glowna
+void loop() {
+  server.handleClient();
+}
