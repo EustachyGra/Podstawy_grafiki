@@ -1231,7 +1231,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:TRUE"
+            "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -1314,7 +1314,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ChatServer"
         "ProductCode" = "8:{E0D4CF03-03F0-4E36-B082-25A6711ACD2B}"
-        "PackageCode" = "8:{1ED6AE58-CF4B-44B8-8552-9AB3F77BD574}"
+        "PackageCode" = "8:{F26519BF-0107-40C3-9742-145BF8A5594A}"
         "UpgradeCode" = "8:{13324D8B-6D22-4A87-808A-79348C9EA42E}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
