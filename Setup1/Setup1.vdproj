@@ -76,6 +76,12 @@
         "Entry"
         {
         "MsmKey" = "8:_239C909697F06C589C4F6C6F80388158"
+        "OwnerKey" = "8:_5CC40BADBAA8E29877A35D1E26F9FEA4"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_239C909697F06C589C4F6C6F80388158"
         "OwnerKey" = "8:_6E3767A2F70445DB848C8C44B31FBA28"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -95,6 +101,42 @@
         {
         "MsmKey" = "8:_28D7B4DD096B4E43BABB9F0AB160C2CA"
         "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_293527A522F64E4B9477A09678C36EC0"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5CC40BADBAA8E29877A35D1E26F9FEA4"
+        "OwnerKey" = "8:_0EFDE0044A854D8D85352F256CB9F103"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5CC40BADBAA8E29877A35D1E26F9FEA4"
+        "OwnerKey" = "8:_EA0CEEE6CB7F3AA26D45C68F2F5F9E57"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5CC40BADBAA8E29877A35D1E26F9FEA4"
+        "OwnerKey" = "8:_AF2F3D12C569766EDE740FF211F9147F"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5CC40BADBAA8E29877A35D1E26F9FEA4"
+        "OwnerKey" = "8:_041518756849C1F9D7E84CC99C671B71"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5CC40BADBAA8E29877A35D1E26F9FEA4"
+        "OwnerKey" = "8:_6E3767A2F70445DB848C8C44B31FBA28"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -197,6 +239,12 @@
         {
         "MsmKey" = "8:_BED0C9B29F67C7AD86AB0F0428E67D8D"
         "OwnerKey" = "8:_6E3767A2F70445DB848C8C44B31FBA28"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_BED0C9B29F67C7AD86AB0F0428E67D8D"
+        "OwnerKey" = "8:_5CC40BADBAA8E29877A35D1E26F9FEA4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -894,6 +942,57 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_293527A522F64E4B9477A09678C36EC0"
+            {
+            "SourcePath" = "8:..\\ClassLibrary1\\bin\\x86\\Release\\e_sqlite3.dll"
+            "TargetName" = "8:e_sqlite3.dll"
+            "Tag" = "8:"
+            "Folder" = "8:_EC2AB7C29A7E4CD89AF7D4D60C70F921"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5CC40BADBAA8E29877A35D1E26F9FEA4"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:SQLitePCLRaw.core, Version=3.0.2.2801, Culture=neutral, PublicKeyToken=1488e028ca7ab535, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_5CC40BADBAA8E29877A35D1E26F9FEA4"
+                    {
+                    "Name" = "8:SQLitePCLRaw.core.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:SQLitePCLRaw.core.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_EC2AB7C29A7E4CD89AF7D4D60C70F921"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5FAD911E3DC5BA294D8575D727377F9B"
             {
             "AssemblyRegister" = "3:1"
@@ -1314,7 +1413,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ChatServer"
         "ProductCode" = "8:{E0D4CF03-03F0-4E36-B082-25A6711ACD2B}"
-        "PackageCode" = "8:{F26519BF-0107-40C3-9742-145BF8A5594A}"
+        "PackageCode" = "8:{40F679D1-6C92-4EC0-B89E-978E44781AE3}"
         "UpgradeCode" = "8:{13324D8B-6D22-4A87-808A-79348C9EA42E}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
