@@ -1,9 +1,5 @@
+// ========================= Ekran.cpp =========================
 #include "ekran.h"
-#include <cmath>
-Vec3 sub(const Vec3 &a, const Vec3 &b) { return {a.x-b.x, a.y-b.y, a.z-b.z}; }
-Vec3 cross(const Vec3 &a, const Vec3 &b) {
-    return { a.y*b.z - a.z*b.y, a.z*b.x - a.x*b.z, a.x*b.y - a.y*b.x };
-}
 
 // ====================== KONSTRUKTOR ======================
 
@@ -19,6 +15,8 @@ void Ekran::showEvent(QShowEvent *)
 {
     im = QImage(width(), height(), QImage::Format_ARGB32);
     im.fill(0xff000000);
+    // initialize z-buffer
+    zbuffer.assign(width()*height(), std::numeric_limits<float>::infinity());
     qDebug() << "show" << width() << height();
     drawCube(0,0,0,0,0,0,1,1,1);
 }
@@ -34,11 +32,10 @@ void Ekran::paintEvent(QPaintEvent *)
 
 void Ekran::drawPixel(int x, int y, int r, int g, int b)
 {
-
     if (x < 0 || y < 0 || x >= im.width() || y >= im.height())
         return;
-    //qDebug() << x << y;
     uchar *px = im.scanLine(y);
+    // keep same channel order as original code (may be BGR in memory)
     px[4 * x + 0] = r;
     px[4 * x + 1] = g;
     px[4 * x + 2] = b;
@@ -73,7 +70,7 @@ void Ekran::drawToPoint(QPoint a, QPoint b)
 QPoint Ekran::project(const Vec3& v)
 {
     float mianownik;
-    if (v.z > -d)
+    if (v.z + d > 0.01f)
         mianownik = (v.z + d);
     else
         mianownik = 1;
@@ -87,7 +84,67 @@ QPoint Ekran::project(const Vec3& v)
         );
 }
 
-// ====================== RYSOWANIE BRYŁY ======================
+// ====================== RYSOWANIE BRYŁY (faces, triangles, z-buffer) ======================
+
+void Ekran::drawTriangle(const Vec3 &v0c, const Vec3 &v1c, const Vec3 &v2c, const QPoint &p0, const QPoint &p1, const QPoint &p2, int baseR, int baseG, int baseB)
+{
+    // bounding box
+    int minX = std::max(0, std::min({p0.x(), p1.x(), p2.x()}));
+    int maxX = std::min(im.width()-1, std::max({p0.x(), p1.x(), p2.x()}));
+    int minY = std::max(0, std::min({p0.y(), p1.y(), p2.y()}));
+    int maxY = std::min(im.height()-1, std::max({p0.y(), p1.y(), p2.y()}));
+
+    // precompute values for barycentric coordinates
+    float x0 = p0.x(), y0 = p0.y();
+    float x1 = p1.x(), y1 = p1.y();
+    float x2 = p2.x(), y2 = p2.y();
+
+    float denom = (y1 - y2)*(x0 - x2) + (x2 - x1)*(y0 - y2);
+    if (std::abs(denom) < 1e-6f) return; // degenerate triangle
+
+    // compute face normal in camera space for shading
+    Vec3 e1 = v1c - v0c;
+    Vec3 e2v = v2c - v0c;
+    Vec3 normal = e1.cross(e2v);
+    float nlen = normal.length();
+    if (nlen == 0) return;
+    Vec3 nunit = { normal.x / nlen, normal.y / nlen, normal.z / nlen };
+    // simple directional light from camera (towards -z)
+    Vec3 light = {0.0f, 0.0f, -1.0f};
+    float llen = light.length();
+    light = { light.x/llen, light.y/llen, light.z/llen };
+    float intensity = nunit.x*light.x + nunit.y*light.y + nunit.z*light.z;
+    if (intensity < 0) intensity = 0.0f; // no negative
+    float ambient = 0.2f;
+    float shade = ambient + (1.0f - ambient) * intensity;
+
+    bool anyPixelDrawn = false;
+
+    for (int y = minY; y <= maxY; ++y){
+        for (int x = minX; x <= maxX; ++x){
+            // barycentric
+            float w0 = ((y1 - y2)*(x - x2) + (x2 - x1)*(y - y2)) / denom;
+            float w1 = ((y2 - y0)*(x - x2) + (x0 - x2)*(y - y2)) / denom;
+            float w2 = 1.0f - w0 - w1;
+            if (w0 < -1e-4f || w1 < -1e-4f || w2 < -1e-4f) continue; // outside
+
+            // interpolate depth (camera-space z)
+            float depth = w0 * v0c.z + w1 * v1c.z + w2 * v2c.z;
+
+            int idx = y*im.width() + x;
+            if (depth < zbuffer[idx]){
+                zbuffer[idx] = depth;
+                int rr = std::min(255, std::max(0, int(baseR * shade)));
+                int gg = std::min(255, std::max(0, int(baseG * shade)));
+                int bb = std::min(255, std::max(0, int(baseB * shade)));
+                drawPixel(x, y, rr, gg, bb);
+                anyPixelDrawn = true;
+            }
+        }
+    }
+
+    // if needed, we could return anyPixelDrawn to detect fully hidden faces
+}
 
 void Ekran::drawCube(
     float tx, float ty, float tz,
@@ -96,53 +153,52 @@ void Ekran::drawCube(
     )
 {
     im.fill(0xff000000);
+    // reset z-buffer
+    zbuffer.assign(im.width()*im.height(), std::numeric_limits<float>::infinity());
+
     qDebug() << tx << ty << tz <<sx <<sy <<sz << ax << ay << az;
     std::vector<Vec3> cube = {
         {-75,-75,-75}, {75,-75,-75}, {75,75,-75}, {-75,75,-75},
         {-75,-75, 75}, {75,-75, 75}, {75,75, 75}, {-75,75, 75}
     };
 
+    // each face has 4 vertices (indices into cube), will be split into two triangles
     int faces[6][4] = {
-        {0,1,2,3}, // tylna
-        {4,5,6,7}, // przednia
-        {0,1,5,4}, // dolna
-        {2,3,7,6}, // górna
-        {0,3,7,4}, // lewa
-        {1,2,6,5}  // prawa
+        {0,1,2,3}, // back
+        {4,5,6,7}, // front
+        {0,1,5,4}, // bottom
+        {2,3,7,6}, // top
+        {1,2,6,5}, // right
+        {0,3,7,4}  // left
     };
 
     Mat4 M = CreateMacierz( tx,  ty,  tz,  az,  ay,  ax,  sx,  sy,  sz);
 
+    // transform all vertices to camera/world space
+    std::vector<Vec3> tv;
     std::vector<QPoint> p;
-    for (auto &v : cube) p.push_back(project(M * v));
-
-    int edgeFaces[12][2] = {
-        {0,2},{0,3},{0,5},{0,4}, // tylne krawędzie
-        {1,2},{1,3},{1,5},{1,4}, // przednie krawędzie
-        {2,4},{3,5},{2,5},{3,4}  // boczne
-    };
-
-    // obliczasz normalną każdej ściany
-    bool faceVisible[6];
-    for (int f=0; f<6; ++f) {
-        Vec3 v0 = M*cube[faces[f][0]];
-        Vec3 v1 = M*cube[faces[f][1]];
-        Vec3 v2 = M*cube[faces[f][2]];
-
-        Vec3 n = cross(sub(v1,v0), sub(v2,v0));
-        Vec3 center = {(v0.x+v1.x+v2.x)/3,(v0.y+v1.y+v2.y)/3,(v0.z+v1.z+v2.z)/3};
-        Vec3 viewDir = {0-center.x,0-center.y,0-center.z};
-
-        faceVisible[f] = (n.x*viewDir.x + n.y*viewDir.y + n.z*viewDir.z) > 0;
+    for (auto& v : cube){
+        Vec3 tc = M * v; // transformed (camera/world)
+        tv.push_back(tc);
+        p.push_back(project(tc));
     }
 
-    // rysowanie krawędzi jeśli którakolwiek przyległa ściana jest widoczna
-    for (int e=0;e<12;++e) {
-        int f1=edgeFaces[e][0], f2=edgeFaces[e][1];
-        if (faceVisible[f1] || faceVisible[f2]) {
-            drawToPoint(p[edges[e][0]], p[edges[e][1]]);
-        }
+    // simple per-face base colors (different for each face)
+    int faceColors[6][3] = {{200,40,40},{40,200,40},{40,40,200},{200,200,40},{200,40,200},{40,200,200}};
+
+    // for each face, rasterize two triangles
+    for (int i=0;i<6;i++){
+        int a = faces[i][0];
+        int b = faces[i][1];
+        int c = faces[i][2];
+        int d = faces[i][3];
+
+        // triangle 1: a,b,c
+        drawTriangle(tv[a], tv[b], tv[c], p[a], p[b], p[c], faceColors[i][0], faceColors[i][1], faceColors[i][2]);
+        // triangle 2: a,c,d
+        drawTriangle(tv[a], tv[c], tv[d], p[a], p[c], p[d], faceColors[i][0], faceColors[i][1], faceColors[i][2]);
     }
+
     update();
 }
 
@@ -158,5 +214,4 @@ Mat4 Ekran::CreateMacierz(float tx, float ty, float tz, float az, float ay, floa
     RX.rotateX(ax);
     S.scale(sx,sy,sz);
     return T*RZ*RY*RX*S;
-
 }
