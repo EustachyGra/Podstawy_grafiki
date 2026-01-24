@@ -7,19 +7,18 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->Polygon,&QComboBox::currentIndexChanged,ui->wEkran, &Ekran::polygonChange);
-    connect(ui->alfa,&QSlider::valueChanged,this,&MainWindow::createMatrix);
-    connect(ui->tx,&QSlider::valueChanged,this,&MainWindow::createMatrix);
-    connect(ui->shx,&QSlider::valueChanged,this,&MainWindow::createMatrix);
-    connect(ui->ty,&QSlider::valueChanged,this,&MainWindow::createMatrix);
-    connect(ui->shy,&QSlider::valueChanged,this,&MainWindow::createMatrix);
-    connect(ui->sx,&QSlider::valueChanged,this,&MainWindow::createMatrix);
-    connect(ui->sy,&QSlider::valueChanged,this,&MainWindow::createMatrix);
-    connect(ui->wEkran,&Ekran::oseted,this,&MainWindow::buttonSelected);
-    connect(ui->origin,&QPushButton::released,ui->wEkran,&Ekran::originset);
-    connect(this,&MainWindow::variables,ui->wEkran,&Ekran::applyMatrix);
-    connect(ui->reset,&QPushButton::released,this,&MainWindow::resetvalues);
-    connect(ui->pushButton,&QPushButton::released,ui->wEkran,&Ekran::transform);
+    connect(ui->tx, &QSlider::valueChanged, this, &MainWindow::createMatrix);
+    connect(ui->ty, &QSlider::valueChanged, this, &MainWindow::createMatrix);
+    connect(ui->tz, &QSlider::valueChanged, this, &MainWindow::createMatrix);
+    connect(ui->ax, &QSlider::valueChanged, this, &MainWindow::createMatrix);
+    connect(ui->ay, &QSlider::valueChanged, this, &MainWindow::createMatrix);
+    connect(ui->az, &QSlider::valueChanged, this, &MainWindow::createMatrix);
+    connect(ui->sx, &QSlider::valueChanged, this, &MainWindow::createMatrix);
+    connect(ui->sy, &QSlider::valueChanged, this, &MainWindow::createMatrix);
+    connect(ui->sz, &QSlider::valueChanged, this, &MainWindow::createMatrix);
+    connect(ui->reset, &QPushButton::released, this, &MainWindow::resetvalues);
+    connect(this,&MainWindow::variables, ui->wEkran, &Ekran::drawCube);
+
 }
 
 MainWindow::~MainWindow()
@@ -27,34 +26,31 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::buttonSelected()
-{
-    ui->origin->setFlat(false);
-    ui->Polygon->blockSignals(true);
-    ui->Polygon->setCurrentIndex(0);
-    ui->Polygon->blockSignals(false);
-}
 void MainWindow::createMatrix()
 {
-    int tx = ui->tx->value();
-    int ty = ui->ty->value();
-    int sx = ui->sx->value();
-    int sy = ui->sy->value();
-    int a = ui->alfa->value();
-    int shx = ui->shx->value();
-    int shy = ui->shy->value();
+    float tx = ui->tx->value();
+    float ty = ui->ty->value();
+    float tz = ui->tz->value();
+    float ax = ui->ax->value();
+    float ay = ui->ay->value();
+    float az = ui->az->value();
+    float sx = ui->sx->value();
+    float sy = ui->sy->value();
+    float sz = ui->sz->value();
 
-    emit variables(tx,ty,sx,sy,a,shx,shy);
+    emit variables(tx/10,ty/10,tz/10,ax,ay,az,1+sx/10,1+sy/10,1+sz/10);
 }
 
 void MainWindow::resetvalues()
 {
     ui->tx->setValue(0);
     ui->ty->setValue(0);
+    ui->tz->setValue(0);
+    ui->ax->setValue(0);
+    ui->ay->setValue(0);
+    ui->az->setValue(0);
     ui->sx->setValue(0);
     ui->sy->setValue(0);
-    ui->alfa->setValue(0);
-    ui->shx->setValue(0);
-    ui->shy->setValue(0);
+    ui->sz->setValue(0);
 }
 

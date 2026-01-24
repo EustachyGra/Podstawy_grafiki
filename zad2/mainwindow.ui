@@ -24,36 +24,6 @@
      </rect>
     </property>
    </widget>
-   <widget class="QComboBox" name="Polygon">
-    <property name="geometry">
-     <rect>
-      <x>660</x>
-      <y>10</y>
-      <width>131</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <item>
-     <property name="text">
-      <string>New Polygon</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Add point</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Delete point</string>
-     </property>
-    </item>
-    <item>
-     <property name="text">
-      <string>Move point</string>
-     </property>
-    </item>
-   </widget>
    <widget class="QSlider" name="tx">
     <property name="geometry">
      <rect>
@@ -64,10 +34,10 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>-100</number>
+     <number>-200</number>
     </property>
     <property name="maximum">
-     <number>100</number>
+     <number>200</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
@@ -83,16 +53,16 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>-100</number>
+     <number>-200</number>
     </property>
     <property name="maximum">
-     <number>100</number>
+     <number>200</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QSlider" name="sx">
+   <widget class="QSlider" name="tz">
     <property name="geometry">
      <rect>
       <x>630</x>
@@ -102,10 +72,10 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>-100</number>
+     <number>-200</number>
     </property>
     <property name="maximum">
-     <number>100</number>
+     <number>200</number>
     </property>
     <property name="value">
      <number>0</number>
@@ -114,7 +84,7 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QSlider" name="sy">
+   <widget class="QSlider" name="ax">
     <property name="geometry">
      <rect>
       <x>630</x>
@@ -124,10 +94,10 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>-100</number>
+     <number>-180</number>
     </property>
     <property name="maximum">
-     <number>100</number>
+     <number>180</number>
     </property>
     <property name="value">
      <number>0</number>
@@ -136,7 +106,7 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QSlider" name="alfa">
+   <widget class="QSlider" name="ay">
     <property name="geometry">
      <rect>
       <x>630</x>
@@ -158,7 +128,7 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QSlider" name="shx">
+   <widget class="QSlider" name="az">
     <property name="geometry">
      <rect>
       <x>630</x>
@@ -168,16 +138,16 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>-100</number>
+     <number>-180</number>
     </property>
     <property name="maximum">
-     <number>100</number>
+     <number>180</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QSlider" name="shy">
+   <widget class="QSlider" name="sx">
     <property name="geometry">
      <rect>
       <x>630</x>
@@ -235,7 +205,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>sx</string>
+     <string>tz</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_4">
@@ -248,53 +218,53 @@
      </rect>
     </property>
     <property name="text">
-     <string>sy</string>
+     <string>ax</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>640</x>
       <y>200</y>
       <width>63</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>alfa</string>
+     <string>ay</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_6">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>640</x>
       <y>240</y>
       <width>63</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>shx</string>
+     <string>az</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_7">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>640</x>
       <y>290</y>
       <width>63</width>
       <height>20</height>
      </rect>
     </property>
     <property name="text">
-     <string>shy</string>
+     <string>sx</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
       <x>660</x>
-      <y>400</y>
+      <y>420</y>
       <width>83</width>
       <height>29</height>
      </rect>
@@ -303,30 +273,87 @@
      <string>Transform</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="origin">
-    <property name="geometry">
-     <rect>
-      <x>660</x>
-      <y>350</y>
-      <width>83</width>
-      <height>29</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>setOrigin</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="reset">
     <property name="geometry">
      <rect>
-      <x>650</x>
-      <y>440</y>
+      <x>640</x>
+      <y>470</y>
       <width>121</width>
       <height>29</height>
      </rect>
     </property>
     <property name="text">
      <string>Reset values</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_9">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>330</y>
+      <width>63</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>sy</string>
+    </property>
+   </widget>
+   <widget class="QSlider" name="sy">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>350</y>
+      <width>160</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>-100</number>
+    </property>
+    <property name="maximum">
+     <number>100</number>
+    </property>
+    <property name="singleStep">
+     <number>5</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>640</x>
+      <y>370</y>
+      <width>63</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>sz</string>
+    </property>
+   </widget>
+   <widget class="QSlider" name="sz">
+    <property name="geometry">
+     <rect>
+      <x>630</x>
+      <y>390</y>
+      <width>160</width>
+      <height>18</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>-100</number>
+    </property>
+    <property name="maximum">
+     <number>100</number>
+    </property>
+    <property name="singleStep">
+     <number>5</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
     </property>
    </widget>
   </widget>

@@ -14,11 +14,10 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-    void buttonSelected();
     void createMatrix();
     void resetvalues();
 signals:
-    void variables(int tx, int ty, int sx, int sy, int a, int shx, int shy);
+    void variables(float tx, float ty, float tz, float ax, float ay, float az, float sx, float sy, float sz);
 private:
     Ui::MainWindow *ui;
 };
