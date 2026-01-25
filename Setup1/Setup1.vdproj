@@ -249,6 +249,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_EB40D23EECF54311A8E1E1AD48DED1A5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_951466C9F1ED4F57A0DB80F0FB08762C"
         "MsmSig" = "8:_UNDEFINED"
@@ -1120,6 +1126,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_EB40D23EECF54311A8E1E1AD48DED1A5"
+            {
+            "SourcePath" = "8:..\\Client\\bin\\x86\\Release\\Client.exe.config"
+            "TargetName" = "8:Client.exe.config"
+            "Tag" = "8:"
+            "Folder" = "8:_4E104DB0A65A45CB92F1A201B67394EE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -1199,7 +1225,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ChatServer"
         "ProductCode" = "8:{E0D4CF03-03F0-4E36-B082-25A6711ACD2B}"
-        "PackageCode" = "8:{4F61AC89-5BAD-406A-A4A8-F88EFB3E58A3}"
+        "PackageCode" = "8:{61FDB6BC-07DB-43AF-B2D7-EEB101492D97}"
         "UpgradeCode" = "8:{13324D8B-6D22-4A87-808A-79348C9EA42E}"
         "AspNetVersion" = "8:"
         "RestartWWWService" = "11:FALSE"
