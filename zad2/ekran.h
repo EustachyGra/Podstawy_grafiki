@@ -1,4 +1,3 @@
-// ========================= Ekran.h =========================
 #ifndef EKRAN_H
 #define EKRAN_H
 
@@ -10,17 +9,39 @@
 #include <QKeyEvent>
 #include <vector>
 #include <cmath>
+#include <QFileDialog>
 #include <QDebug>
 #include <algorithm>
 #include <limits>
 
-enum class DrawType{
-    None,
-    setOrigin,
-    Fill,
-    AddPolP,
-    DelPolP,
-    MvPolP
+struct RGB{
+    int r,g,b,a;
+    RGB(){};
+    RGB(int _r, int _g, int _b, int _a)
+    {
+        r=_r;
+        g=_g;
+        b=_b;
+        a=_a;
+    }
+    RGB operator*(double a)
+    {
+        RGB tmp;
+        tmp.r=this->r*a;
+        tmp.g=this->g*a;
+        tmp.b=this->b*a;
+        tmp.a=this->a*a;
+        return tmp;
+    }
+    RGB operator+(RGB c)
+    {
+        RGB tmp;
+        tmp.r=(this->r+c.r)%255;
+        tmp.g=(this->g+c.g)%255;
+        tmp.b=(this->b+c.b)%255;
+        tmp.a=(this->a+c.a)%255;
+        return tmp;
+    }
 };
 
 struct Vec3
@@ -30,7 +51,7 @@ struct Vec3
     {
         return { x - v2.x, y - v2.y, z - v2.z };
     }
-    float operator*(const Vec3 &v2) const // dot product
+    float operator*(const Vec3 &v2) const
     {
         return x*v2.x + y*v2.y + z*v2.z;
     }
@@ -123,33 +144,33 @@ class Ekran : public QWidget
     Q_OBJECT
     QImage im;
     bool isPressed = false;
-    DrawType type;
     QPoint origin;
     QPoint start, last;
-    QImage im_save;
+    QImage texture;
     std::vector<QPoint> polPi;
     std::vector<QPoint> polT;
     int idxPi = -1;
     int r = 255, g = 255, b = 255;
     float d = 250.0f;
-
-    // z-buffer (per-pixel depth)
+    QPoint TA,TB,TC,TD;
     std::vector<float> zbuffer;
+    std::vector<double> invZ;
 
 public:
     explicit Ekran(QWidget *parent=nullptr);
 
     QPoint project(const Vec3 &v);
     void drawCube(float tx, float ty, float tz, float ax, float ay, float az, float sx, float sy, float sz);
-
+    void importTexture();
     void showEvent(QShowEvent *);
     void paintEvent(QPaintEvent *);
-    void drawPixel(int x, int y, int r, int g, int b);
-    void drawToPoint(QPoint a, QPoint b);
+    void drawPixel(int x, int y, int r, int g, int b, int a);
     Mat4 CreateMacierz(float tx, float ty, float tz, float az, float ay, float ax, float sx, float sy, float sz);
-
-    // new: triangle rasterizer
-    void drawTriangle(const Vec3 &v0c, const Vec3 &v1c, const Vec3 &v2c, const QPoint &p0, const QPoint &p1, const QPoint &p2, int baseR, int baseG, int baseB);
+    void drawTriangle(QPoint p0, QPoint p1, QPoint p2, float z0, float z1, float z2, bool whichTriangle);
+    bool isLineCrossed(QPoint l1, QPoint l2, int y);
+    float findCrossPoint(QPoint l1, QPoint l2, int y);
+    void getRGBA(double u, double v, double w, int& r, int& g, int& b, int& a, bool whichTriangle);
+    RGB getRGB(QPoint p);
 };
 
 #endif // EKRAN_H

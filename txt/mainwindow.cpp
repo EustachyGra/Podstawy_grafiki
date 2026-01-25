@@ -31,6 +31,7 @@ void MainWindow::on_pushButton_clicked()
 
     qDebug() << filename;
     ui->tekstura->loadImg(filename);
+
 }
 
 void MainWindow::rob()

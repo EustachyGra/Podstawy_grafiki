@@ -34,10 +34,10 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>-200</number>
+     <number>-100</number>
     </property>
     <property name="maximum">
-     <number>200</number>
+     <number>100</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
@@ -53,10 +53,10 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>-200</number>
+     <number>-100</number>
     </property>
     <property name="maximum">
-     <number>200</number>
+     <number>100</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
@@ -72,10 +72,10 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>-200</number>
+     <number>-100</number>
     </property>
     <property name="maximum">
-     <number>200</number>
+     <number>100</number>
     </property>
     <property name="value">
      <number>0</number>
@@ -94,10 +94,10 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>-180</number>
+     <number>-360</number>
     </property>
     <property name="maximum">
-     <number>180</number>
+     <number>360</number>
     </property>
     <property name="value">
      <number>0</number>
@@ -116,10 +116,10 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>-180</number>
+     <number>-360</number>
     </property>
     <property name="maximum">
-     <number>180</number>
+     <number>360</number>
     </property>
     <property name="tracking">
      <bool>true</bool>
@@ -138,10 +138,10 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>-180</number>
+     <number>-360</number>
     </property>
     <property name="maximum">
-     <number>180</number>
+     <number>360</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
@@ -157,10 +157,10 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>-100</number>
+     <number>-20</number>
     </property>
     <property name="maximum">
-     <number>100</number>
+     <number>20</number>
     </property>
     <property name="singleStep">
      <number>5</number>
@@ -309,10 +309,10 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>-100</number>
+     <number>-20</number>
     </property>
     <property name="maximum">
-     <number>100</number>
+     <number>20</number>
     </property>
     <property name="singleStep">
      <number>5</number>
@@ -344,13 +344,16 @@
      </rect>
     </property>
     <property name="minimum">
-     <number>-100</number>
+     <number>-20</number>
     </property>
     <property name="maximum">
-     <number>100</number>
+     <number>20</number>
     </property>
     <property name="singleStep">
      <number>5</number>
+    </property>
+    <property name="value">
+     <number>0</number>
     </property>
     <property name="orientation">
      <enum>Qt::Horizontal</enum>

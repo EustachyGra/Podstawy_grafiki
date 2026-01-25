@@ -38,7 +38,7 @@ void MainWindow::createMatrix()
     float sy = ui->sy->value();
     float sz = ui->sz->value();
 
-    emit variables(tx/10,ty/10,tz/10,ax,ay,az,1+sx/10,1+sy/10,1+sz/10);
+    emit variables(tx,ty,tz,ax,ay,az,1+sx/10,1+sy/10,1+sz/10);
 }
 
 void MainWindow::resetvalues()
