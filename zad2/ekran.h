@@ -78,12 +78,18 @@ struct Mat4
 
     Vec3 operator*(const Vec3& v) const
     {
-        float x = m[0][0]*v.x + m[0][1]*v.y + m[0][2]*v.z + m[0][3];
-        float y = m[1][0]*v.x + m[1][1]*v.y + m[1][2]*v.z + m[1][3];
-        float z = m[2][0]*v.x + m[2][1]*v.y + m[2][2]*v.z + m[2][3];
+        Vec3 tmp;
+        tmp.x = m[0][0]*v.x + m[0][1]*v.y + m[0][2]*v.z + m[0][3];
+        tmp.y = m[1][0]*v.x + m[1][1]*v.y + m[1][2]*v.z + m[1][3];
+        tmp.z = m[2][0]*v.x + m[2][1]*v.y + m[2][2]*v.z + m[2][3];
         float w = m[3][0]*v.x + m[3][1]*v.y + m[3][2]*v.z + m[3][3];
-        if (w != 0.0f && w != 1.0f) { x/=w; y/=w; z/=w; }
-        return {x, y, z};
+        if (w != 0.0f && w != 1.0f)
+        {
+            tmp.x/=w;
+            tmp.y/=w;
+            tmp.z/=w;
+        }
+        return tmp;
     }
 
     Mat4 operator*(const Mat4 &o) const

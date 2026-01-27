@@ -80,7 +80,7 @@ void Ekran::drawTriangle(QPoint p0, QPoint p1, QPoint p2, float z0, float z1, fl
             continue;
         int xStart = (int)std::ceil(crossPoints[0]);
         int xEnd   = (int)std::floor(crossPoints[1]);
-        if(xStart <0 && xEnd >= width())
+        if((xStart <0 && xEnd >= width())  || xEnd<0 || xStart >= width() )
             continue;
         invZ.clear();
         double invZ0 = 1.0 / (double(z0) + double(d));
@@ -147,7 +147,7 @@ void Ekran::drawCube(
     im.fill(0xff000000);
     zbuffer.assign(im.width()*im.height(), std::numeric_limits<float>::infinity());
 
-    qDebug() << tx << ty << tz <<sx <<sy <<sz << ax << ay << az;
+   // qDebug() << tx << ty << tz <<sx <<sy <<sz << ax << ay << az;
     std::vector<Vec3> cube = {
         {-75,-75,-75}, {75,-75,-75}, {75,75,-75}, {-75,75,-75},
         {-75,-75, 75}, {75,-75, 75}, {75,75, 75}, {-75,75, 75}
@@ -170,6 +170,7 @@ void Ekran::drawCube(
         Vec3 tc = M * v;
         tv.push_back(tc);
         p.push_back(project(tc));
+
     }
 
     for (int i=0;i<6;i++){
@@ -219,7 +220,7 @@ void Ekran::importTexture()
 
 Mat4 Ekran::CreateMacierz(float tx, float ty, float tz, float az, float ay, float ax, float sx, float sy, float sz)
 {
-    qDebug() << tx << ty << tz <<sx <<sy <<sz << ax << ay << az;
+    //qDebug() << tx << ty << tz <<sx <<sy <<sz << ax << ay << az;
 
     Mat4 T,RZ,RY,RX,S;
     T = RZ = RY = RX = S = Mat4::Identity();
