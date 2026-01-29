@@ -1,0 +1,77 @@
+dane <- read.table("stres.txt",TRUE)
+dane$wiek <- as.numeric(dane$wiek)
+dane$cisnienie <- as.numeric(dane$cisnienie)
+dane$stres <- as.numeric(dane$stres)
+
+dane$plec <- factor(dane$plec, levels = c("0","1"), labels = c("Mezczyzni","Kobiety"))
+summary(dane$cisnienie)
+srednia_c <- mean(dane$cisnienie)
+median_c <- median(dane$cisnienie)
+odch_c <- sd(dane$cisnienie)
+var_c <- var(dane$cisnienie)
+dane
+
+x <- tapply(dane$cisnienie, dane$plec, mean)
+if (x[1] < x[2]) {
+  print("Mezczyzni mniejsze")
+} else if (x[1] > x[2]) {
+  print("Mezczyzni wieksze")
+} else {
+  print("Rowne")
+}
+
+quantile(dane$cisnienie, 0.35)
+
+if(srednia_c < median_c ){
+  print("lewostronnie skosny")
+} else if(srednia_c > median_c){
+  print("prawostronnie skosny")
+} else{
+  print("symmetryczny")
+}
+
+#install.packages("moments")
+library(moments)
+kurtosis(dane$cisnienie)
+
+boxplot(dane$cisnienie ~ dane$plec,
+        data = dane,
+        xlab = "Płeć",
+        ylab = "Ciśnienie",
+        main = "Wykres skrzynkowy ciśnienia według płci")
+alfa <- 0.05
+#H0: liczba kobiet i mężczyzn w badaniu jest taka sama
+#H1: liczba kobiet i mężczyzn w badaniu różni się
+test_plec <- chisq.test(table(dane$plec))
+p <- test_plec$p.value
+if(p < alfa ){
+  print("odrzucamy H0")
+} else {
+  print("Brak podstaw do odrzucenia H0")
+} 
+# test_plec.valye <alfa odrzucamy H0 jak nie to nie mamy podstaw do odrzucenia H0
+#H0: zmienna cisnienie ma rozkład normalny
+#H1: zmienna cisnienie nie ma rozkładu normalnego
+alfa<-0.05
+test_norm <- shapiro.test(dane$cisnienie)
+p <- test_norm$p.value
+if(p < alfa ){
+  print("odrzucamy H0")
+} else {
+  print("Brak podstaw do odrzucenia H0")
+} 
+#H0: srednia ≤ 145.5
+#H1: srednia > 145.5
+alfa <-0.05
+test_srednia <- t.test(dane$cisnienie,
+                       mu = 145.5,
+                       alternative = "greater")
+
+p <- test_srednia$p.value
+if(p < alfa ){
+  print("odrzucamy H0")
+} else {
+  print("Brak podstaw do odrzucenia H0")
+} 
+
+t.test(dane$cisnienie, conf.level = 0.95)$conf.int
