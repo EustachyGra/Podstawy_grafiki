@@ -16,8 +16,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->sx, &QSlider::valueChanged, this, &MainWindow::createMatrix);
     connect(ui->sy, &QSlider::valueChanged, this, &MainWindow::createMatrix);
     connect(ui->sz, &QSlider::valueChanged, this, &MainWindow::createMatrix);
+    connect(this, &MainWindow::variables, ui->wEkran, &Ekran::drawModel);
     connect(ui->reset, &QPushButton::released, this, &MainWindow::resetvalues);
-    connect(this,&MainWindow::variables, ui->wEkran, &Ekran::drawCube);
 
 }
 
