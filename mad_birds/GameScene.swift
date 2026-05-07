@@ -46,4 +46,87 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         prevTime = currentTime
     }
+    func load(level: Level) {
+
+        let bird = ParrotNode(texture: nil, color: .clear, size: CGSize(width: 50, height: 50))
+        bird.configure(textureName: level.birdTexture,
+                       position: CGPoint(x: level.birdPosition.x, y: level.birdPosition.y))
+        bird.name = "parrotNode"
+        addChild(bird)
+
+        for enemy in level.enemies {
+            let node = StoneNode(texture: nil, color: .clear, size: CGSize(width: 50, height: 50))
+            node.configure(textureName: enemy.textureName,
+                           position: CGPoint(x: enemy.position.x, y: enemy.position.y))
+            node.name = "enemy"
+            addChild(node)
+
+            ResultManager.shared.registerEnemy() // 🔥 WAŻNE: bo init(coder:) już się nie wykona
+        }
+    }
+
+    func clearDynamicNodes() {
+        for node in children {
+            if node.name == "enemy" || node.name == "parrotNode" {
+                node.removeFromParent()
+            }
+        }
+    }
+    func spawnBird(at position: Position, textureName: String) {
+        let texture = SKTexture(imageNamed: textureName)
+        let bird = SKSpriteNode(texture: texture)
+        
+        bird.name = "parrotNode"
+        bird.userData = NSMutableDictionary()
+        bird.userData?["textureName"] = textureName
+        
+        bird.position = CGPoint(x: position.x, y: position.y)
+        addChild(bird)
+    }
+
+    func spawnEnemy(at position: Position, textureName: String) {
+        let texture = SKTexture(imageNamed: textureName)
+        let enemy = SKSpriteNode(texture: texture)
+        
+        enemy.name = "enemy"
+        enemy.userData = NSMutableDictionary()
+        enemy.userData?["textureName"] = textureName
+        
+        enemy.position = CGPoint(x: position.x, y: position.y)
+        addChild(enemy)
+    }
+    func saveLevel(named levelName: String) -> Level {
+        guard let bird = self.childNode(withName: "//parrotNode") as? SKSpriteNode else {
+            fatalError("Brak ptaka")
+        }
+
+        let birdTexture = bird.userData?["textureName"] as? String ?? "ptak"
+
+        let birdPosition = Position(
+            x: Double(bird.position.x),
+            y: Double(bird.position.y)
+        )
+
+        let enemyNodes = self.children.compactMap { $0 as? SKSpriteNode }
+            .filter { $0.name == "enemy" }
+
+        let enemies: [Enemy] = enemyNodes.map {
+            let textureName = $0.userData?["textureName"] as? String ?? "stone_h_3"
+
+            return Enemy(
+                position: Position(
+                    x: Double($0.position.x),
+                    y: Double($0.position.y)
+                ),
+                textureName: textureName
+            )
+        }
+
+        return Level(
+            name: levelName,
+            birdPosition: birdPosition,
+            birdTexture: birdTexture,
+            enemies: enemies
+        )
+    }
 }

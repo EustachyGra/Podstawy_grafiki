@@ -9,6 +9,7 @@ import GameplayKit
 
 class GameStateMachine: GKStateMachine{
     static let shared = GameStateMachine()
+    weak var gvc:GameViewController?
     init()
     {
         super.init(states: [

@@ -12,6 +12,22 @@ class StoneNode : SKSpriteNode{
         super.init(coder: aDecoder)
         ResultManager.shared.registerEnemy();
     }
+    override init(texture: SKTexture?, color: UIColor, size: CGSize) {
+        super.init(texture: texture, color: color, size: size)
+    }
+    func configure(textureName: String, position: CGPoint) {
+
+        let texture = SKTexture(imageNamed: "stone_h_3")
+        self.size = CGSize(width: 176.275, height: 42.463)
+        self.texture = texture
+
+        self.position = position
+
+        self.physicsBody = SKPhysicsBody(texture: texture, size: self.size)
+        self.physicsBody?.affectedByGravity = false
+        self.physicsBody?.allowsRotation = true
+        self.physicsBody?.isDynamic = true
+    }
     func damage()
     {
         hp = hp-1;
