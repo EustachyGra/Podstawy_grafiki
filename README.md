@@ -57,3 +57,24 @@ secrets {
     }
 }
 ```
+```
+printf '\033[0m'
+vim ~/.bashrc
+# Automatyczna animacja kolorów terminala
+if [[ $- == *i* ]] && [[ -z "$RAINBOW_RUNNING" ]]; then
+    export RAINBOW_RUNNING=1
+
+    (
+        while true; do
+            FG=$((RANDOM % 256))
+            BG=$((RANDOM % 256))
+
+            printf '\033[38;5;%sm' "$FG"
+            printf '\033[48;5;%sm' "$BG"
+
+            sleep 2
+        done
+    ) &
+fi
+
+```
