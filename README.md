@@ -78,3 +78,33 @@ if [[ $- == *i* ]] && [[ -z "$RAINBOW_RUNNING" ]]; then
 fi
 
 ```
+```
+#!/usr/sbin/nft -f
+
+flush ruleset
+
+table inet router_filter {
+
+    chain forward {
+        type filter hook forward priority filter;
+        policy drop;
+
+        # Allow LAN to WAN
+        iifname "ens34" oifname "ens33" accept
+
+        # Allow established connections back to LAN
+        iifname "ens33" oifname "ens34" \
+        ct state established,related accept
+    }
+}
+
+table ip router_nat {
+
+    chain postrouting {
+        type nat hook postrouting priority srcnat;
+
+        # Enable NAT for LAN network
+        oifname "ens33" ip saddr 192.168.50.0/24 masquerade
+    }
+}
+```
