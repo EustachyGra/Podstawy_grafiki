@@ -1,0 +1,101 @@
+
+# =========================
+# C# / .NET
+# =========================
+
+# Build output
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Aa]rtifacts/
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+SoSasiad.Functions/publish/*
+
+# JetBrains Rider / ReSharper
+.idea/
+_ReSharper*/
+*.DotSettings.user
+c#/UslugaLaby/packages/*
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/packages/
+
+# Test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Logs
+*.log
+
+# Local configuration and secrets
+appsettings.Local.json
+appsettings.Development.local.json
+secrets.json
+
+# =========================
+# React / Node.js
+# =========================
+
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+.next/
+out/
+coverage/
+
+# Environment variables / secrets
+.env
+.env.*
+!.env.example
+
+# Package manager logs
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Tool caches
+.eslintcache
+.cache/
+.parcel-cache/
+.vite/
+
+# TypeScript
+*.tsbuildinfo
+
+# =========================
+# OS files
+# =========================
+
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# =========================
+# Editors
+# =========================
+
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+
+*.db*
+SoSasiad.Server/storage/*
+test_posts/*
+generate_test_posts.py
+# Azure Functions local settings
+SoSasiad.Functions/local.settings.json

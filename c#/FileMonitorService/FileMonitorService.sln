@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36518.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FileMonitorService", "FileMonitorService\FileMonitorService.csproj", "{2656810B-75EB-491C-A0BC-FCCC1187510D}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Instalka", "Instalka\Instalka.vdproj", "{31183EEA-36EE-1F77-61B5-5AD677E0762E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2656810B-75EB-491C-A0BC-FCCC1187510D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2656810B-75EB-491C-A0BC-FCCC1187510D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2656810B-75EB-491C-A0BC-FCCC1187510D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2656810B-75EB-491C-A0BC-FCCC1187510D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31183EEA-36EE-1F77-61B5-5AD677E0762E}.Debug|Any CPU.ActiveCfg = Debug
+		{31183EEA-36EE-1F77-61B5-5AD677E0762E}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B1635704-D7E5-4593-AA9F-832DD84F1230}
+	EndGlobalSection
+EndGlobal
